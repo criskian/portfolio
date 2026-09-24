@@ -30,12 +30,11 @@ export function Header() {
         <a
           href={`#${SECTION_IDS.input}`}
           className="group flex items-center gap-2.5 font-mono text-xs tracking-wider"
-          aria-label="Cristian Molina"
         >
           <span className="relative grid size-8 place-items-center rounded-full border border-border-strong">
             <span className="size-1.5 rounded-full bg-accent shadow-[0_0_10px_var(--accent-glow)] transition-transform duration-500 group-hover:scale-[2.2]" />
           </span>
-          <span className="hidden sm:inline">cristian.molina</span>
+          <span className="sr-only sm:not-sr-only">cristian.molina</span>
         </a>
 
         <nav aria-label={t.a11y.primaryNav} className="hidden md:block">

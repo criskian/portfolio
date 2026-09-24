@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
+import { useScroll, useTransform } from "motion/react";
+import * as m from "motion/react-m";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
@@ -51,7 +52,7 @@ export function Manifesto() {
   const ringOpacity = useTransform(scrollYProgress, [0, 0.4, 1], [0, 1, 0]);
 
   return (
-    <motion.section
+    <m.section
       ref={ref}
       id={SECTION_IDS.output}
       data-splash="on"
@@ -63,7 +64,7 @@ export function Manifesto() {
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-x-0 top-0 h-[80svh] bg-[radial-gradient(55%_45%_at_50%_0%,var(--accent-soft),transparent_75%)]" />
         {!reducedMotion && (
-          <motion.div
+          <m.div
             style={{ scale: ringScale, opacity: ringOpacity }}
             className="absolute top-0 left-1/2 size-[60vmax] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/50 shadow-[0_0_80px_var(--accent-soft)]"
           />
@@ -111,7 +112,7 @@ export function Manifesto() {
                 href={CONTACT_HREF}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex items-center gap-3 rounded-full bg-accent px-7 py-4 text-base font-medium text-white shadow-[0_10px_40px_-10px_var(--accent)] transition-transform duration-300 hover:scale-[1.03] active:scale-95"
+                className="group inline-flex items-center gap-3 rounded-full bg-accent-strong px-7 py-4 text-base font-medium text-white shadow-[0_10px_40px_-10px_var(--accent)] transition-transform duration-300 hover:scale-[1.03] active:scale-95"
               >
                 {manifesto.cta}
                 <ArrowUpRightIcon className="size-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -130,6 +131,6 @@ export function Manifesto() {
       </div>
 
       <Footer />
-    </motion.section>
+    </m.section>
   );
 }
