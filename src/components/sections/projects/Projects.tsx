@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ScrollAssembleText } from "@/components/skiper/ScrollAssembleText";
 import { BlurRichText } from "@/components/text/BlurRichText";
-import { PROJECTS, PROJECTS_ARE_MOCKS } from "@/content/projects";
+import { HAS_MOCK_PROJECTS, PROJECTS } from "@/content/projects";
 import { useIsLight } from "@/hooks/useIsLight";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -82,7 +82,7 @@ export function Projects() {
             text={t.projects.subtitle}
             className="mt-5 max-w-xl text-lead text-muted"
           />
-          {PROJECTS_ARE_MOCKS && (
+          {HAS_MOCK_PROJECTS && (
             <p className="mt-4 font-mono text-[0.7rem] tracking-wider text-muted/70">
               {"// "}
               {t.projects.mockNotice}

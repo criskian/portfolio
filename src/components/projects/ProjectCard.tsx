@@ -85,20 +85,33 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 {project.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={project.image}
-                    alt=""
+                    src={project.image.src}
+                    srcSet={project.image.srcSet}
+                    sizes={
+                      project.size === "md"
+                        ? "(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 92vw"
+                        : "(min-width: 1024px) 62vw, 92vw"
+                    }
+                    width={project.image.width}
+                    height={project.image.height}
+                    alt={project.image.alt[locale]}
                     loading="lazy"
                     decoding="async"
-                    className="size-full object-cover grayscale transition-[filter] duration-700 group-hover:grayscale-0 group-data-[active=true]:grayscale-0"
+                    className="size-full object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0 group-data-[active=true]:grayscale-0 dark:brightness-[0.82] dark:group-hover:brightness-100 dark:group-data-[active=true]:brightness-100"
                   />
                 ) : (
                   <ProjectCover variant={project.cover} />
                 )}
               </div>
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_120%,var(--accent-soft),transparent_60%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100 group-data-[active=true]:opacity-100" />
-              {project.featured && (
-                <span className="absolute top-3 left-3 rounded-full border border-accent/40 bg-bg/70 px-2.5 py-1 font-mono text-[0.6rem] tracking-widest text-accent uppercase backdrop-blur">
-                  {t.projects.featured}
+              {(project.featured || project.mock) && (
+                <span
+                  className={cn(
+                    "absolute top-3 right-3 rounded-full border bg-bg/70 px-2.5 py-1 font-mono text-[0.6rem] tracking-widest uppercase backdrop-blur",
+                    project.featured ? "border-accent/40 text-accent" : "border-border text-muted",
+                  )}
+                >
+                  {project.featured ? t.projects.featured : t.projects.placeholder}
                 </span>
               )}
             </div>
@@ -120,6 +133,21 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             <p className="mt-3 text-sm leading-relaxed text-pretty text-muted">
               {project.summary[locale]}
             </p>
+
+            {project.metrics && project.size !== "md" && (
+              <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-border pt-4">
+                {project.metrics.map((metric) => (
+                  <div key={metric.value} className="flex flex-col-reverse">
+                    <dt className="mt-0.5 font-mono text-[0.6rem] leading-snug tracking-wider text-muted uppercase">
+                      {metric.label[locale]}
+                    </dt>
+                    <dd className="text-xl font-semibold tracking-tight tabular-nums sm:text-2xl">
+                      {metric.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
 
             <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-border pt-4 text-xs">
               <div>
@@ -148,7 +176,12 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
               ))}
             </ul>
 
-            <div className="mt-auto flex items-center gap-5 pt-6 text-sm">
+            <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6 text-sm">
+              {project.links.demo && (
+                <AnimatedLink href={project.links.demo} className="font-medium text-accent">
+                  {t.projects.liveDemo}
+                </AnimatedLink>
+              )}
               {project.links.case && (
                 <AnimatedLink href={project.links.case} className="text-fg">
                   {t.projects.viewCase}
