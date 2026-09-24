@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { motion, useMotionValue, useAnimationFrame, useTransform } from "motion/react";
+import { useMotionValue, useAnimationFrame, useTransform } from "motion/react";
+import * as m from "motion/react-m";
 
 interface ShinyTextProps {
   text: string;
@@ -117,14 +118,14 @@ const ShinyText: React.FC<ShinyTextProps> = ({
   };
 
   return (
-    <motion.span
+    <m.span
       className={`inline-block ${className}`}
       style={{ ...gradientStyle, backgroundPosition }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {text}
-    </motion.span>
+    </m.span>
   );
 };
 

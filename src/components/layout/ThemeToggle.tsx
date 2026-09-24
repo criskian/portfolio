@@ -10,7 +10,7 @@
  * Transitions API. Browsers without it — or users who prefer reduced motion —
  * get an instant switch.
  */
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import { useTheme } from "next-themes";
 import { useRef } from "react";
 
@@ -65,7 +65,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       )}
     >
       <svg viewBox="0 0 240 240" fill="none" className="size-6" aria-hidden>
-        <motion.g
+        <m.g
           initial={false}
           animate={{ rotate: isDark ? -180 : 0 }}
           transition={{ ease: "easeInOut", duration: 0.5 }}
@@ -79,8 +79,8 @@ export function ThemeToggle({ className }: { className?: string }) {
             d="M120 67.5C90.75 67.5 67.5 90.75 67.5 120C67.5 149.25 90.75 172.5 120 172.5"
             className="fill-accent"
           />
-        </motion.g>
-        <motion.path
+        </m.g>
+        <m.path
           initial={false}
           animate={{ rotate: isDark ? 180 : 0 }}
           transition={{ ease: "easeInOut", duration: 0.5 }}
