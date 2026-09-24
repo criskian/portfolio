@@ -10,7 +10,7 @@ import { detectDeviceTier, onIdle, type DeviceTier } from "@/lib/device";
 import type { SplashCursorProps } from "./SplashCursor";
 import { SPLASH_PALETTES, splashStore } from "./splash-store";
 
-// WebGL code never runs on the server and is fetched only after the page is idle.
+// WebGL code never runs on the server and is fetched on the first interaction.
 const SplashCursor = dynamic(() => import("./SplashCursor"), { ssr: false });
 
 const TIER_CONFIG: Record<DeviceTier, SplashCursorProps> = {
@@ -38,7 +38,22 @@ export function SplashController() {
   const { resolvedTheme } = useTheme();
   const [tier, setTier] = useState<DeviceTier | null>(null);
 
-  useEffect(() => onIdle(() => setTier(detectDeviceTier())), []);
+  // Mount the simulation on the first pointer/touch interaction: the effect only
+  // exists when the pointer moves, so nobody pays for WebGL setup (shader
+  // compilation) before they interact — and page-load metrics stay clean.
+  useEffect(() => {
+    const events = ["pointermove", "pointerdown", "touchstart"] as const;
+    let cancelIdle: (() => void) | undefined;
+    const start = () => {
+      events.forEach((e) => window.removeEventListener(e, start));
+      cancelIdle = onIdle(() => setTier(detectDeviceTier()), 300);
+    };
+    events.forEach((e) => window.addEventListener(e, start, { passive: true, once: true }));
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, start));
+      cancelIdle?.();
+    };
+  }, []);
 
   useEffect(() => {
     splashStore.palette = resolvedTheme === "light" ? SPLASH_PALETTES.light : SPLASH_PALETTES.dark;
