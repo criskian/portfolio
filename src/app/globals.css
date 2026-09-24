@@ -221,3 +221,92 @@
     }
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Procedural project covers: grayscale at rest, electric blue and      */
+/* animated on hover (desktop) or when centred on screen (touch).       */
+/* ------------------------------------------------------------------ */
+.project-cover {
+  color: var(--muted);
+  opacity: 0.55;
+  transition:
+    color 0.6s var(--ease-out-expo),
+    opacity 0.6s var(--ease-out-expo);
+}
+
+.project-cover .cover-hl {
+  fill: currentColor;
+}
+
+.project-cover .cover-hl-stroke {
+  stroke: currentColor;
+}
+
+.project-cover .cover-hl-text {
+  fill: currentColor;
+}
+
+.project-cover .cover-pulse,
+.project-cover .cover-drift,
+.project-cover .cover-scan,
+.project-cover .cover-spin {
+  animation-play-state: paused;
+  transform-box: fill-box;
+}
+
+.project-cover .cover-pulse {
+  transform-origin: center;
+  animation: cover-pulse 2.4s ease-in-out infinite paused;
+}
+
+.project-cover .cover-drift {
+  animation: cover-drift 7s linear infinite alternate paused;
+}
+
+.project-cover .cover-scan {
+  animation: cover-scan 2.8s var(--ease-in-out-quart) infinite alternate paused;
+}
+
+.project-cover .cover-spin {
+  transform-box: view-box;
+  animation: cover-spin 26s linear infinite paused;
+}
+
+.group:hover .project-cover,
+.group[data-active="true"] .project-cover {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.group:hover .project-cover *,
+.group[data-active="true"] .project-cover * {
+  animation-play-state: running;
+}
+
+@keyframes cover-pulse {
+  50% {
+    transform: scale(1.35);
+    opacity: 0.6;
+  }
+}
+
+@keyframes cover-drift {
+  to {
+    transform: translateX(-180px);
+  }
+}
+
+@keyframes cover-scan {
+  from {
+    transform: translateY(34px);
+  }
+  to {
+    transform: translateY(186px);
+  }
+}
+
+@keyframes cover-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
