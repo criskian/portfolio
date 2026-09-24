@@ -20,7 +20,9 @@
   --accent-soft: rgb(0 56 255 / 0.1);
   --border: rgb(0 0 0 / 0.08);
   --border-strong: rgb(0 0 0 / 0.16);
-  --halo: rgb(0 56 255 / 0.28);
+  --portrait-halo: rgb(0 56 255 / 0.22);
+  --portrait-rim: rgb(0 56 255 / 0.75);
+  --portrait-aura: rgb(61 107 255 / 0.35);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
@@ -39,7 +41,9 @@
   --accent-soft: rgb(47 123 255 / 0.14);
   --border: rgb(255 255 255 / 0.08);
   --border-strong: rgb(255 255 255 / 0.16);
-  --halo: rgb(255 255 255 / 0.55);
+  --portrait-halo: rgb(255 255 255 / 0.32);
+  --portrait-rim: rgb(255 255 255 / 0.95);
+  --portrait-aura: rgb(47 123 255 / 0.55);
 
   color-scheme: dark;
 }
@@ -109,9 +113,28 @@
     text-wrap: pretty;
   }
 
+  /* Portrait: fade the bottom so the shirt dissolves into the page. */
+  .portrait-fade {
+    mask-image: linear-gradient(to bottom, #000 68%, transparent 98%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent 98%);
+  }
+
+  .portrait-breathe {
+    animation: portrait-breathe 4.5s ease-in-out infinite alternate;
+  }
+
   /* Mono label used for the `layer_0X — name` section markers. */
   .layer-label {
     @apply font-mono text-[0.7rem] tracking-[0.2em] text-muted uppercase;
+  }
+}
+
+@keyframes portrait-breathe {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
   }
 }
 
