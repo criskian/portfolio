@@ -1,6 +1,7 @@
 import { SplashController } from "@/components/cursor/SplashController";
 import { Header } from "@/components/layout/Header";
 import { Hero } from "@/components/sections/hero/Hero";
+import { ForwardPass } from "@/components/transitions/ForwardPass";
 import { SECTION_IDS } from "@/lib/constants";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <SplashController />
       <main id="main">
         <Hero />
+        <ForwardPass />
         <section
           id={SECTION_IDS.hidden}
           data-splash="off"
