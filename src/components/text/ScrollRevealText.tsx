@@ -36,10 +36,10 @@ export function ScrollRevealText({ text, className }: ScrollRevealTextProps) {
   return (
     <p
       ref={ref}
-      aria-label={stripRich(text)}
       className={className}
       style={{ "--n": words.length, "--p": reducedMotion ? 1 : 0 } as React.CSSProperties}
     >
+      <span className="sr-only">{stripRich(text)}</span>
       {words.map((pieces, i) => (
         <span
           key={i}

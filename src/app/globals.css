@@ -18,6 +18,7 @@
   --accent: #0038ff;
   --accent-glow: #3d6bff;
   --accent-soft: rgb(0 56 255 / 0.1);
+  --accent-strong: #0038ff;
   --border: rgb(0 0 0 / 0.08);
   --border-strong: rgb(0 0 0 / 0.16);
   --portrait-halo: rgb(0 56 255 / 0.22);
@@ -39,6 +40,7 @@
   --accent: #2f7bff;
   --accent-glow: #5ea0ff;
   --accent-soft: rgb(47 123 255 / 0.14);
+  --accent-strong: #1f5fff;
   --border: rgb(255 255 255 / 0.08);
   --border-strong: rgb(255 255 255 / 0.16);
   --portrait-halo: rgb(255 255 255 / 0.32);
@@ -57,6 +59,7 @@
   --color-accent: var(--accent);
   --color-accent-glow: var(--accent-glow);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-strong: var(--accent-strong);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
 
@@ -93,7 +96,7 @@
   }
 
   ::selection {
-    background: var(--accent);
+    background: var(--accent-strong);
     color: #fff;
   }
 
@@ -135,6 +138,13 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes portrait-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
   }
 }
 
@@ -314,6 +324,95 @@
 /* ScrollRevealText: each word derives its opacity from the paragraph's scroll */
 /* progress (--p), its index (--i) and the word count (--n).                   */
 .scroll-word {
-  opacity: clamp(0.14, calc(var(--p) * (var(--n) + 6) - var(--i)), 1);
+  /* --r: 0 → 1 as this word gets revealed. The 0.55 floor keeps unrevealed */
+  /* words above WCAG's 3:1 large-text contrast in both themes.             */
+  --r: clamp(0, calc(var(--p) * (var(--n) + 6) - var(--i)), 1);
+  opacity: calc(0.55 + 0.45 * var(--r));
   transition: opacity 0.12s linear;
+}
+
+/* Accent words start in the text colour and turn electric blue as revealed. */
+.scroll-word .text-accent {
+  color: color-mix(in srgb, var(--accent) calc(var(--r) * 100%), var(--fg));
+}
+
+/* Hero name: CSS "focus" entrance that starts on first paint (it is the LCP). */
+.name-in {
+  animation: name-in 1.2s var(--ease-out-expo) both;
+}
+
+@keyframes name-in {
+  from {
+    opacity: 0.01;
+    filter: blur(14px);
+    transform: translateY(0.12em);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* CSS-driven reveals (no per-element JS; see components/text/*).       */
+/* ------------------------------------------------------------------ */
+
+/* BlurRichText: words blur-in with a stagger once the block is in view. */
+.blur-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s var(--ease-out-expo),
+    filter 0.6s var(--ease-out-expo),
+    transform 0.6s var(--ease-out-expo);
+  transition-delay: calc(var(--delay, 0s) + var(--i) * var(--stagger, 0.035s));
+}
+
+[data-visible="true"] > .blur-word {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* ScrollAssembleText: letters converge as --p goes 0 → 1. */
+.assemble-char {
+  display: inline-block;
+  --q: calc(1 - var(--p, 1));
+  transform: translateX(calc(var(--q) * var(--o) * 2.4vw))
+    rotateX(calc(var(--q) * var(--o) * 40deg));
+  opacity: calc(0.15 + 0.85 * min(1, var(--p, 1) / 0.6));
+}
+
+/* ForwardPass: edges draw via normalised pathLength="1" and --draw. */
+.fp-edge {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--draw, 0));
+}
+
+/* TextRoll: letters roll up on hover/focus (CSS port of skiper58). */
+.text-roll-letter {
+  display: inline-block;
+  white-space: pre;
+  transition: transform 0.45s var(--ease-in-out-quart);
+  transition-delay: calc(var(--i) * 0.025s);
+}
+
+.text-roll-bottom .text-roll-letter {
+  transform: translateY(100%);
+}
+
+.text-roll:hover .text-roll-top .text-roll-letter,
+:focus-visible > .text-roll .text-roll-top .text-roll-letter {
+  transform: translateY(-100%);
+}
+
+.text-roll:hover .text-roll-bottom .text-roll-letter,
+:focus-visible > .text-roll .text-roll-bottom .text-roll-letter {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blur-word {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
 }

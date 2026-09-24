@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { SplashController } from "@/components/cursor/SplashController";
 import { Header } from "@/components/layout/Header";
 import { PersonJsonLd } from "@/components/seo/PersonJsonLd";
@@ -14,11 +16,23 @@ export default function Home() {
       <Header />
       <SplashController />
       <main id="main">
-        <Hero />
-        <ForwardPass />
-        <Projects />
-        <ActivationBands />
-        <Manifesto />
+        {/* Each Suspense boundary is a separate hydration unit: React hydrates the
+            sections in independent tasks and yields to the main thread in between. */}
+        <Suspense>
+          <Hero />
+        </Suspense>
+        <Suspense>
+          <ForwardPass />
+        </Suspense>
+        <Suspense>
+          <Projects />
+        </Suspense>
+        <Suspense>
+          <ActivationBands />
+        </Suspense>
+        <Suspense>
+          <Manifesto />
+        </Suspense>
       </main>
     </>
   );
