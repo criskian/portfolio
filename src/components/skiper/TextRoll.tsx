@@ -4,7 +4,7 @@
  *
  * Changes: pure CSS port (the original animates every letter with motion
  * components; here each letter only gets a --i index and CSS transitions do
- * the rest — see .text-roll in globals.css), screen-reader friendly, and
+ * the rest — see .roll in globals.css), screen-reader friendly, and
  * triggered by keyboard focus as well as hover.
  */
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ export function TextRoll({ children, className }: TextRollProps) {
   const row = (extra: string) => (
     <span aria-hidden className={cn("block", extra)}>
       {letters.map((l, i) => (
-        <span key={i} className="text-roll-letter" style={{ "--i": i } as React.CSSProperties}>
+        <span key={i} className="roll-letter" style={{ "--i": i } as React.CSSProperties}>
           {l}
         </span>
       ))}
@@ -27,10 +27,10 @@ export function TextRoll({ children, className }: TextRollProps) {
   );
 
   return (
-    <span className={cn("text-roll relative block overflow-hidden leading-[1.1]", className)}>
+    <span className={cn("roll relative block overflow-hidden leading-[1.1]", className)}>
       <span className="sr-only">{children}</span>
-      {row("text-roll-top")}
-      {row("text-roll-bottom absolute inset-0 text-accent")}
+      {row("roll-top")}
+      {row("roll-bottom absolute inset-0 text-accent")}
     </span>
   );
 }

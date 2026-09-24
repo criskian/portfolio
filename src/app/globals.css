@@ -388,24 +388,24 @@
 }
 
 /* TextRoll: letters roll up on hover/focus (CSS port of skiper58). */
-.text-roll-letter {
+.roll-letter {
   display: inline-block;
   white-space: pre;
   transition: transform 0.45s var(--ease-in-out-quart);
   transition-delay: calc(var(--i) * 0.025s);
 }
 
-.text-roll-bottom .text-roll-letter {
+.roll-bottom .roll-letter {
   transform: translateY(100%);
 }
 
-.text-roll:hover .text-roll-top .text-roll-letter,
-:focus-visible > .text-roll .text-roll-top .text-roll-letter {
+.roll:hover .roll-top .roll-letter,
+:focus-visible > .roll .roll-top .roll-letter {
   transform: translateY(-100%);
 }
 
-.text-roll:hover .text-roll-bottom .text-roll-letter,
-:focus-visible > .text-roll .text-roll-bottom .text-roll-letter {
+.roll:hover .roll-bottom .roll-letter,
+:focus-visible > .roll .roll-bottom .roll-letter {
   transform: none;
 }
 
