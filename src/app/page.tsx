@@ -1,5 +1,6 @@
 import { SplashController } from "@/components/cursor/SplashController";
 import { Header } from "@/components/layout/Header";
+import { Hero } from "@/components/sections/hero/Hero";
 import { SECTION_IDS } from "@/lib/constants";
 
 export default function Home() {
@@ -8,13 +9,7 @@ export default function Home() {
       <Header />
       <SplashController />
       <main id="main">
-        <section
-          id={SECTION_IDS.input}
-          data-splash="on"
-          className="flex min-h-svh items-center justify-center"
-        >
-          <p className="layer-label">layer_01 — input</p>
-        </section>
+        <Hero />
         <section
           id={SECTION_IDS.hidden}
           data-splash="off"
