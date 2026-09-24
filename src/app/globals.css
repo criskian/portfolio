@@ -1,26 +1,157 @@
 @import "tailwindcss";
 
+/* Class-based dark mode driven by next-themes (dark is the default). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ */
+/* Design tokens                                                        */
+/* Black & white dominate; electric blue is reserved for details.      */
+/* Dark mode uses a bright blue (contrast on black), light mode a deep  */
+/* blue (WCAG AA contrast on white).                                   */
+/* ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #ffffff;
+  --surface: #f4f5f7;
+  --surface-2: #eceef2;
+  --fg: #0a0a0a;
+  --muted: #52525b;
+  --accent: #0038ff;
+  --accent-glow: #3d6bff;
+  --accent-soft: rgb(0 56 255 / 0.1);
+  --border: rgb(0 0 0 / 0.08);
+  --border-strong: rgb(0 0 0 / 0.16);
+  --halo: rgb(0 56 255 / 0.28);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #030304;
+  --surface: #0b0b0f;
+  --surface-2: #121218;
+  --fg: #fafafa;
+  --muted: #a1a1aa;
+  --accent: #2f7bff;
+  --accent-glow: #5ea0ff;
+  --accent-soft: rgb(47 123 255 / 0.14);
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --halo: rgb(255 255 255 / 0.55);
+
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-glow: var(--accent-glow);
+  --color-accent-soft: var(--accent-soft);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  --ease-out-expo: var(--ease-out-expo);
+  --ease-in-out-quart: var(--ease-in-out-quart);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Fluid type scale — no jumps between breakpoints. */
+@theme {
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 6.5rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.045em;
+  --text-headline: clamp(2rem, 1.3rem + 3.2vw, 4.25rem);
+  --text-headline--line-height: 1;
+  --text-headline--letter-spacing: -0.035em;
+  --text-lead: clamp(1.05rem, 0.95rem + 0.45vw, 1.35rem);
+  --text-lead--line-height: 1.55;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Mono label used for the `layer_0X — name` section markers. */
+  .layer-label {
+    @apply font-mono text-[0.7rem] tracking-[0.2em] text-muted uppercase;
+  }
+}
+
+/* Honour users who ask for less motion: kill CSS animations globally.   */
+/* JS-driven animations read the same media query via useReducedMotion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Theme switch: circular reveal from the toggle (View Transitions).    */
+/* --vt-x / --vt-y / --vt-r are set by <ThemeToggle /> right before.   */
+/* ------------------------------------------------------------------ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+  animation: theme-reveal 0.75s var(--ease-in-out-quart);
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+  to {
+    clip-path: circle(var(--vt-r, 150%) at var(--vt-x, 50%) var(--vt-y, 0));
+  }
 }
