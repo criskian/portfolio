@@ -17,29 +17,39 @@ Inline markup supported in the copy:
 
 ## Projects
 
-The six current projects are **placeholders** (`PROJECTS_ARE_MOCKS = true` in
-[`src/content/projects.ts`](../src/content/projects.ts) shows a notice under the
-section title). To add a real one:
+Projects live in [`src/content/projects.ts`](../src/content/projects.ts), in
+display order (the first card is the featured one). Placeholder projects carry
+`mock: true`: they get a "placeholder" badge and the section shows a short
+notice while at least one remains. Delete them as real projects arrive.
 
 ```ts
 {
-  slug: "my-project",                       // unique, kebab-case
+  slug: "my-project",                        // unique, kebab-case
   title: "My Project",
-  tagline: { en: "…", es: "…" },            // one line, shown in mono above the title
-  summary: { en: "…", es: "…" },            // 1–2 sentences: problem → what you built
-  role: { en: "Lead engineer", es: "Ingeniero líder" },
-  impact: { en: "−40% latency", es: "−40% de latencia" }, // one headline metric
-  stack: ["Python", "FastAPI", "AWS"],
+  tagline: { en: "…", es: "…" },             // one line, shown in mono above the title
+  summary: { en: "…", es: "…" },             // 2–3 sentences: problem → what was built → why it matters
+  role: { en: "Data engineer", es: "Ingeniero de datos" },
+  impact: { en: "−40% latency", es: "−40% de latencia" }, // one headline result
+  metrics: [                                 // optional, up to 3, shown on lg / wide cards
+    { value: "10.6M", label: { en: "rows processed", es: "filas procesadas" } },
+  ],
+  stack: ["PySpark", "DuckDB"],              // 4–6 chips reads best
   year: 2026,
-  size: "md",                               // "lg" = 2 columns, "wide" = full row
+  size: "md",                                // "lg" = 2 columns, "wide" = full row
   featured: false,
-  cover: "graph",                           // graph | cloud | stream | vision | forecast | agents
-  image: "/images/projects/my-project.webp", // optional 16:10 screenshot, replaces the cover
-  links: { case: "https://…", repo: "https://…" },
+  cover: "graph",                            // lakehouse | graph | cloud | stream | vision | forecast | agents
+  image: projectImage("my-project", { en: "Alt text…", es: "Texto alternativo…" }),
+  links: { demo: "https://…", case: "https://…", repo: "https://…" },
 }
 ```
 
-When all projects are real, set `PROJECTS_ARE_MOCKS` to `false`.
+### Screenshots
+
+`projectImage(name, alt)` expects three 16:9 WebP files in
+`public/images/projects/`: `name-640.webp`, `name-960.webp` and
+`name-1280.webp`. Crop out browser/app chrome (toolbars, badges) and keep the
+most important content in the top half — cards crop from the top (`object-top`).
+Aim for ≤ 50 KB at 1280 px.
 
 Tips for the bento grid (3 columns on desktop): combine sizes so rows fill up —
 for example `lg + md`, `md + md + md`, `wide`.
