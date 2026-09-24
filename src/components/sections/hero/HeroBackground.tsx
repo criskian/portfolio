@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+import { useIsLight } from "@/hooks/useIsLight";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { detectDeviceTier, hasWebGL, onIdle, type DeviceTier } from "@/lib/device";
 
@@ -15,7 +15,6 @@ const WebThreads = dynamic(() => import("@/components/reactbits/WebThreads"), { 
  * and browsers without WebGL keep the static CSS gradient underneath.
  */
 export function HeroBackground() {
-  const { resolvedTheme } = useTheme();
   const reducedMotion = useReducedMotion();
   const [tier, setTier] = useState<DeviceTier | null>(null);
 
@@ -27,7 +26,7 @@ export function HeroBackground() {
     [],
   );
 
-  const light = resolvedTheme === "light";
+  const light = useIsLight();
   const animated = tier !== null && tier !== "low" && !reducedMotion;
 
   return (
