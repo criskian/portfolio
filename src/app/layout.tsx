@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 
 import { Providers } from "@/components/providers/Providers";
+import { SITE, SOCIAL } from "@/content/social";
 import { en } from "@/i18n/dictionaries/en";
 
 import "./globals.css";
@@ -29,8 +30,42 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE.url),
   title: en.meta.title,
   description: en.meta.description,
+  applicationName: SITE.name,
+  authors: [{ name: SITE.name, url: SOCIAL.github.href }],
+  creator: SITE.name,
+  keywords: [
+    "Cristian Molina",
+    "software engineer",
+    "AI engineer",
+    "machine learning",
+    "cloud architecture",
+    "data engineering",
+    "portfolio",
+  ],
+  alternates: {
+    canonical: "/",
+    languages: { en: "/", es: "/?lang=es" },
+  },
+  openGraph: {
+    type: "profile",
+    url: "/",
+    siteName: SITE.name,
+    title: en.meta.title,
+    description: en.meta.description,
+    locale: "en_US",
+    alternateLocale: ["es_ES"],
+    firstName: "Cristian",
+    lastName: "Molina",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: en.meta.title,
+    description: en.meta.description,
+  },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
