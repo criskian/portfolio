@@ -310,3 +310,10 @@
     transform: rotate(360deg);
   }
 }
+
+/* ScrollRevealText: each word derives its opacity from the paragraph's scroll */
+/* progress (--p), its index (--i) and the word count (--n).                   */
+.scroll-word {
+  opacity: clamp(0.14, calc(var(--p) * (var(--n) + 6) - var(--i)), 1);
+  transition: opacity 0.12s linear;
+}
