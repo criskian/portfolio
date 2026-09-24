@@ -13,7 +13,7 @@ const styles = {
     clip: "rect(0,0,0,0)",
     whiteSpace: "nowrap" as const,
     border: 0,
-    visibility: "hidden" as const,
+    // Portfolio fix: `visibility: hidden` also hid this text from screen readers.
   },
 };
 
@@ -384,7 +384,7 @@ export default function DecryptedText({
       {...props}
     >
       <span className="sr-only" style={styles.srOnly}>
-        {displayText}
+        {text /* Portfolio fix: announce the final text, not a scrambled frame */}
       </span>
 
       <span aria-hidden="true">
