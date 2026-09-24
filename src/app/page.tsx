@@ -1,9 +1,10 @@
 import { SplashController } from "@/components/cursor/SplashController";
 import { Header } from "@/components/layout/Header";
 import { Hero } from "@/components/sections/hero/Hero";
+import { Manifesto } from "@/components/sections/manifesto/Manifesto";
 import { Projects } from "@/components/sections/projects/Projects";
+import { ActivationBands } from "@/components/transitions/ActivationBands";
 import { ForwardPass } from "@/components/transitions/ForwardPass";
-import { SECTION_IDS } from "@/lib/constants";
 
 export default function Home() {
   return (
@@ -14,13 +15,8 @@ export default function Home() {
         <Hero />
         <ForwardPass />
         <Projects />
-        <section
-          id={SECTION_IDS.output}
-          data-splash="on"
-          className="flex min-h-svh items-center justify-center"
-        >
-          <p className="layer-label">layer_03 — output</p>
-        </section>
+        <ActivationBands />
+        <Manifesto />
       </main>
     </>
   );
