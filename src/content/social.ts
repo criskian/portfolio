@@ -1,6 +1,8 @@
 export const SITE = {
   name: "Cristian Molina",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://github.com/criskian/portfolio",
+  /** Canonical origin. Set NEXT_PUBLIC_SITE_URL once the deployment domain is decided. */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  role: "Software Engineer — AI solutions, cloud & data",
 } as const;
 
 export const SOCIAL = {
