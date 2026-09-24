@@ -19,6 +19,12 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
+      <a
+        href="#main"
+        className="sr-only rounded-full bg-accent px-4 py-2 text-sm text-white focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-10"
+      >
+        {t.a11y.skipToContent}
+      </a>
       <ProgressiveBlur position="top" height="110px" className="-z-10" />
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:h-20 sm:px-8">
         <a
