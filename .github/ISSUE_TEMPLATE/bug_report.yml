@@ -1,0 +1,53 @@
+name: Bug report
+description: Something looks or behaves wrong
+title: "fix: "
+labels: ["type: fix"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you see, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the site on …
+        2. Scroll to …
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: section
+    attributes:
+      label: Section
+      options:
+        - Header (toggles / navigation)
+        - Hero — input layer
+        - Forward pass transition
+        - Projects — hidden layers
+        - Activation transition
+        - Manifesto — output layer
+        - Whole page
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device, OS and browser
+      placeholder: "iPhone 15, iOS 19, Safari"
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme / language
+      multiple: true
+      options: [Dark, Light, English, Spanish]
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or recording
