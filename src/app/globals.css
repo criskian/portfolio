@@ -324,10 +324,10 @@
 /* ScrollRevealText: each word derives its opacity from the paragraph's scroll */
 /* progress (--p), its index (--i) and the word count (--n).                   */
 .scroll-word {
-  /* --r: 0 → 1 as this word gets revealed. The 0.55 floor keeps unrevealed */
-  /* words above WCAG's 3:1 large-text contrast in both themes.             */
+  /* --r: 0 → 1 as this word gets revealed. The 0.6 floor keeps unrevealed   */
+  /* words above WCAG AA 4.5:1 contrast in both themes.                     */
   --r: clamp(0, calc(var(--p) * (var(--n) + 6) - var(--i)), 1);
-  opacity: calc(0.55 + 0.45 * var(--r));
+  opacity: calc(0.6 + 0.4 * var(--r));
   transition: opacity 0.12s linear;
 }
 
