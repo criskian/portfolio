@@ -7,13 +7,13 @@ import React, {
   useState,
 } from "react";
 import {
-  motion,
   AnimatePresence,
   type Transition,
   type VariantLabels,
   type Target,
   type TargetAndTransition,
 } from "motion/react";
+import * as m from "motion/react-m";
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -27,7 +27,7 @@ export interface RotatingTextRef {
 }
 
 export interface RotatingTextProps extends Omit<
-  React.ComponentPropsWithoutRef<typeof motion.span>,
+  React.ComponentPropsWithoutRef<typeof m.span>,
   "children" | "transition" | "initial" | "animate" | "exit"
 > {
   texts: string[];
@@ -195,7 +195,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
     }, [next, rotationInterval, auto]);
 
     return (
-      <motion.span
+      <m.span
         className={cn("relative flex flex-wrap whitespace-pre-wrap", mainClassName)}
         {...rest}
         layout
@@ -203,7 +203,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
       >
         <span className="sr-only">{texts[currentTextIndex]}</span>
         <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
-          <motion.span
+          <m.span
             key={currentTextIndex}
             className={cn(
               splitBy === "lines"
@@ -220,7 +220,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
               return (
                 <span key={wordIndex} className={cn("inline-flex", splitLevelClassName)}>
                   {wordObj.characters.map((char, charIndex) => (
-                    <motion.span
+                    <m.span
                       key={charIndex}
                       initial={initial}
                       animate={animate}
@@ -235,15 +235,15 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
                       className={cn("inline-block", elementLevelClassName)}
                     >
                       {char}
-                    </motion.span>
+                    </m.span>
                   ))}
                   {wordObj.needsSpace && <span className="whitespace-pre"> </span>}
                 </span>
               );
             })}
-          </motion.span>
+          </m.span>
         </AnimatePresence>
-      </motion.span>
+      </m.span>
     );
   },
 );
