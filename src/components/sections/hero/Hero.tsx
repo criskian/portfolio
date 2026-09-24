@@ -1,14 +1,12 @@
 "use client";
 
-import { motion } from "motion/react";
-
 import { ArrowDownIcon, GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { Portrait } from "@/components/portrait/Portrait";
-import DecryptedText from "@/components/reactbits/DecryptedText";
 import Magnet from "@/components/reactbits/Magnet";
 import RotatingText from "@/components/reactbits/RotatingText";
 import StarBorder from "@/components/reactbits/StarBorder";
 import { BlurRichText } from "@/components/text/BlurRichText";
+import DecryptedText from "@/components/reactbits/DecryptedText";
 import { SOCIAL } from "@/content/social";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SECTION_IDS } from "@/lib/constants";
@@ -32,17 +30,13 @@ export function Hero() {
 
       <div className="mx-auto grid w-full max-w-7xl items-center gap-6 px-4 sm:px-8 md:grid-cols-[5fr_7fr] md:gap-10 lg:gap-16">
         {/* Portrait — left on desktop, top on mobile. */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative mx-auto w-[min(72vw,40svh)] md:w-full md:max-w-[520px]"
-        >
+        {/* CSS entrance (not JS) so the portrait — the LCP element — paints immediately. */}
+        <div className="relative mx-auto w-[min(72vw,40svh)] animate-[portrait-in_1.1s_var(--ease-out-expo)_both] md:w-full md:max-w-[520px]">
           <Portrait alt={hero.portraitAlt} />
           <span className="layer-label absolute top-[18%] -right-3 hidden [writing-mode:vertical-rl] md:block">
             node[0] · activation 0.97
           </span>
-        </motion.div>
+        </div>
 
         {/* Copy — right on desktop, bottom on mobile. */}
         <div className="relative text-center md:text-left">
@@ -63,10 +57,11 @@ export function Hero() {
             />
           </p>
 
-          <h1 id="hero-title" className="text-display font-semibold">
+          <h1 id="hero-title" className="name-in text-display font-semibold">
+            {/* Decrypts again on hover; the load entrance is CSS so the LCP paints at once. */}
             <DecryptedText
               text={hero.name}
-              animateOn="view"
+              animateOn="hover"
               sequential
               revealDirection="start"
               speed={45}
@@ -75,7 +70,7 @@ export function Hero() {
             />
           </h1>
 
-          <p className="mt-5 flex flex-wrap items-baseline justify-center gap-x-2 text-lead text-muted md:justify-start">
+          <p className="mt-5 flex flex-col items-center gap-x-2 text-lead text-muted md:flex-row md:items-baseline md:justify-start">
             <span>{hero.rolePrefix}</span>
             <RotatingText
               key={`roles-${locale}`}
