@@ -24,7 +24,7 @@ const OUT_DIR = path.join(ROOT, "public/images/generated");
 
 /** Keep in sync with src/content/portrait.ts */
 const WIDTHS = [320, 480, 640, 800];
-const MARGIN = { x: 70, top: 60 };
+const MARGIN = { x: 110, top: 160 };
 const ALPHA_THRESHOLD = 16;
 
 async function subjectBox(image) {
