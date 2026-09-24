@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 import type { HTMLMotionProps } from "motion/react";
 
 const styles = {
@@ -377,7 +377,7 @@ export default function DecryptedText({
         : {};
 
   return (
-    <motion.span
+    <m.span
       ref={containerRef}
       className={`inline-block whitespace-pre-wrap ${parentClassName}`}
       {...animateProps}
@@ -391,13 +391,26 @@ export default function DecryptedText({
         {displayText.split("").map((char, index) => {
           const isRevealedOrDone = revealedIndices.has(index) || (!isAnimating && isDecrypted);
 
+          const finalChar = text[index] ?? char;
+
+          // Portfolio fix (CLS): scrambled glyphs have different widths and made
+          // the text re-flow every frame. Each slot now reserves the width of its
+          // final character and the current glyph is overlaid on top of it.
+          if (isRevealedOrDone || char === finalChar) {
+            return (
+              <span key={index} className={isRevealedOrDone ? className : encryptedClassName}>
+                {char}
+              </span>
+            );
+          }
           return (
-            <span key={index} className={isRevealedOrDone ? className : encryptedClassName}>
-              {char}
+            <span key={index} className="relative">
+              <span className="invisible">{finalChar}</span>
+              <span className={`absolute top-0 left-0 ${encryptedClassName}`}>{char}</span>
             </span>
           );
         })}
       </span>
-    </motion.span>
+    </m.span>
   );
 }

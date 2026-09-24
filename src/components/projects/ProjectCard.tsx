@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "motion/react";
+import * as m from "motion/react-m";
 
 import BorderGlow from "@/components/reactbits/BorderGlow";
-import DecryptedText from "@/components/reactbits/DecryptedText";
 import { AnimatedLink } from "@/components/skiper/AnimatedLink";
+import DecryptedText from "@/components/reactbits/DecryptedText";
 import type { Project } from "@/content/projects";
 import { useCenterActive } from "@/hooks/useCenterActive";
 import { useIsLight } from "@/hooks/useIsLight";
@@ -34,7 +34,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
   const wide = project.size === "wide";
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -163,6 +163,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           </div>
         </article>
       </BorderGlow>
-    </motion.div>
+    </m.div>
   );
 }
