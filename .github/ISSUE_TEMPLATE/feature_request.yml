@@ -1,0 +1,24 @@
+name: Feature or content request
+description: Propose an improvement, new effect or content change
+title: "feat: "
+labels: ["type: feature"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What should change and why?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Components (React Bits / Skiper UI / custom), sections affected, references.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Constraints
+      options:
+        - label: Keeps the SplashCursor rule (on in hero & manifesto, off in projects)
+        - label: Considered performance on low-end phones
+        - label: Works in dark and light themes, English and Spanish

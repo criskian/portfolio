@@ -1,0 +1,38 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+      include: scope
+    labels: ["type: chore"]
+    groups:
+      react-next:
+        patterns: ["react", "react-dom", "next", "eslint-config-next", "@types/react*"]
+      animation:
+        patterns: ["motion", "gsap", "ogl"]
+      tooling:
+        patterns:
+          [
+            "eslint*",
+            "prettier*",
+            "typescript",
+            "vitest",
+            "@vitejs/*",
+            "@playwright/*",
+            "@testing-library/*",
+            "husky",
+            "lint-staged",
+            "@commitlint/*",
+          ]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    labels: ["type: ci"]
