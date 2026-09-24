@@ -2,7 +2,17 @@ import type { Locale } from "@/i18n/types";
 
 type Localized = Record<Locale, string>;
 
-export type CoverVariant = "graph" | "cloud" | "stream" | "vision" | "forecast" | "agents";
+export type CoverVariant =
+  "lakehouse" | "graph" | "cloud" | "stream" | "vision" | "forecast" | "agents";
+
+export interface ProjectImage {
+  /** Largest file; `srcSet` lists every generated width. */
+  src: string;
+  srcSet: string;
+  width: number;
+  height: number;
+  alt: Localized;
+}
 
 export interface Project {
   slug: string;
@@ -10,42 +20,73 @@ export interface Project {
   tagline: Localized;
   summary: Localized;
   role: Localized;
-  /** One headline metric — the "loss" this project reduced. */
+  /** One headline result — the "loss" this project reduced. */
   impact: Localized;
+  /** Up to three key figures, shown on large cards. */
+  metrics?: { value: string; label: Localized }[];
   stack: string[];
   year: number;
   /** Bento size: `lg` spans two columns, `wide` spans the full row on desktop. */
   size: "lg" | "md" | "wide";
   featured?: boolean;
+  /** Placeholder project, flagged on its card until replaced by a real one. */
+  mock?: boolean;
+  /** Procedural cover (also the card's category label). Hidden when `image` is set. */
   cover: CoverVariant;
-  /** Optional screenshot (16:10) in /public; the generated cover is used otherwise. */
-  image?: string;
-  links: { case?: string; repo?: string };
+  image?: ProjectImage;
+  links: { demo?: string; case?: string; repo?: string };
 }
 
-/**
- * MOCK DATA — placeholder projects that match the profile (AI, cloud, data).
- * Replace them with real case studies; see docs/CONTENT.md.
- */
-export const PROJECTS_ARE_MOCKS = true;
+const projectImage = (name: string, alt: Localized): ProjectImage => ({
+  src: `/images/projects/${name}-1280.webp`,
+  srcSet: [640, 960, 1280].map((w) => `/images/projects/${name}-${w}.webp ${w}w`).join(", "),
+  width: 1280,
+  height: 720,
+  alt,
+});
 
+/** See docs/CONTENT.md to add or replace projects. */
 export const PROJECTS: Project[] = [
   {
-    slug: "synapse",
-    title: "Synapse",
-    tagline: { en: "Enterprise RAG assistant", es: "Asistente RAG empresarial" },
-    summary: {
-      en: "A retrieval-augmented assistant that turns 40,000 scattered internal documents into grounded, cited answers in seconds.",
-      es: "Un asistente con recuperación aumentada que convierte 40.000 documentos internos dispersos en respuestas citadas y confiables en segundos.",
+    slug: "retail-transactions-lakehouse",
+    title: "Retail Transactions Lakehouse",
+    tagline: {
+      en: "Medallion lakehouse on 1.1M real supermarket baskets",
+      es: "Lakehouse medallion sobre 1,1 M de canastas reales",
     },
-    role: { en: "Lead engineer", es: "Ingeniero líder" },
-    impact: { en: "−62% time-to-answer", es: "−62% tiempo de respuesta" },
-    stack: ["Python", "FastAPI", "LangGraph", "pgvector", "AWS Bedrock"],
+    summary: {
+      en: "Six months of baskets from four stores — no prices, quantities or transaction IDs — turned into a reproducible PySpark lakehouse, customer segments and product recommendations. Heavy compute runs in CI; the dashboard only reads a 24 MB DuckDB file, so it deploys for free.",
+      es: "Seis meses de canastas de cuatro tiendas —sin precios, cantidades ni IDs de transacción— convertidos en un lakehouse reproducible con PySpark, segmentos de clientes y recomendaciones de productos. El cómputo pesado corre en CI; el dashboard solo lee un DuckDB de 24 MB, así que se despliega gratis.",
+    },
+    role: { en: "Data & ML engineer", es: "Ingeniero de datos y ML" },
+    impact: {
+      en: "Free deploy: compute split from serving",
+      es: "Despliegue gratis: cómputo separado del serving",
+    },
+    metrics: [
+      {
+        value: "10.6M",
+        label: { en: "rows from 1.1M baskets", es: "filas desde 1,1 M de canastas" },
+      },
+      {
+        value: "131K",
+        label: { en: "customers with a top-10", es: "clientes con top-10" },
+      },
+      { value: "26", label: { en: "data contracts", es: "contratos de datos" } },
+    ],
+    stack: ["PySpark", "Spark MLlib", "DuckDB", "Streamlit", "pandera", "GitHub Actions"],
     year: 2026,
     size: "lg",
     featured: true,
-    cover: "graph",
-    links: { case: "https://github.com/criskian", repo: "https://github.com/criskian" },
+    cover: "lakehouse",
+    image: projectImage("retail-lakehouse", {
+      en: "Retail Lakehouse dashboard: executive summary with sales KPIs, daily transactions and top products",
+      es: "Dashboard Retail Lakehouse: resumen ejecutivo con KPIs de ventas, transacciones diarias y productos más vendidos",
+    }),
+    links: {
+      demo: "https://retail-transactions-lakehouse.streamlit.app/",
+      repo: "https://github.com/criskian/retail-transactions-lakehouse",
+    },
   },
   {
     slug: "stratus",
@@ -60,23 +101,25 @@ export const PROJECTS: Project[] = [
     stack: ["Terraform", "AWS Organizations", "GitHub Actions", "OPA"],
     year: 2025,
     size: "md",
+    mock: true,
     cover: "cloud",
     links: { repo: "https://github.com/criskian" },
   },
   {
-    slug: "riverflow",
-    title: "Riverflow",
-    tagline: { en: "Real-time data pipeline", es: "Pipeline de datos en tiempo real" },
+    slug: "synapse",
+    title: "Synapse",
+    tagline: { en: "Enterprise RAG assistant", es: "Asistente RAG empresarial" },
     summary: {
-      en: "Streaming platform that ingests, validates and serves product events to analytics and ML features in near real time.",
-      es: "Plataforma de streaming que ingiere, valida y sirve eventos de producto para analítica y features de ML casi en tiempo real.",
+      en: "A retrieval-augmented assistant that turns 40,000 scattered internal documents into grounded, cited answers in seconds.",
+      es: "Un asistente con recuperación aumentada que convierte 40.000 documentos internos dispersos en respuestas citadas y confiables en segundos.",
     },
-    role: { en: "Data engineer", es: "Ingeniero de datos" },
-    impact: { en: "2M events/min · p95 < 3 s", es: "2M eventos/min · p95 < 3 s" },
-    stack: ["Kafka", "Spark Streaming", "Delta Lake", "Airflow"],
-    year: 2025,
+    role: { en: "Lead engineer", es: "Ingeniero líder" },
+    impact: { en: "−62% time-to-answer", es: "−62% tiempo de respuesta" },
+    stack: ["Python", "FastAPI", "LangGraph", "pgvector", "AWS Bedrock"],
+    year: 2026,
     size: "md",
-    cover: "stream",
+    mock: true,
+    cover: "graph",
     links: { repo: "https://github.com/criskian" },
   },
   {
@@ -92,6 +135,7 @@ export const PROJECTS: Project[] = [
     stack: ["PyTorch", "ONNX Runtime", "Jetson", "MLflow"],
     year: 2024,
     size: "md",
+    mock: true,
     cover: "vision",
     links: { repo: "https://github.com/criskian" },
   },
@@ -108,6 +152,7 @@ export const PROJECTS: Project[] = [
     stack: ["Vertex AI", "BigQuery", "dbt", "Python"],
     year: 2024,
     size: "md",
+    mock: true,
     cover: "forecast",
     links: { repo: "https://github.com/criskian" },
   },
@@ -124,7 +169,10 @@ export const PROJECTS: Project[] = [
     stack: ["TypeScript", "LLM agents", "MCP", "Kubernetes", "Grafana"],
     year: 2026,
     size: "wide",
+    mock: true,
     cover: "agents",
-    links: { case: "https://github.com/criskian", repo: "https://github.com/criskian" },
+    links: { repo: "https://github.com/criskian" },
   },
 ];
+
+export const HAS_MOCK_PROJECTS = PROJECTS.some((p) => p.mock);

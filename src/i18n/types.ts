@@ -51,6 +51,8 @@ export interface Dictionary {
     subtitle: string;
     viewCase: string;
     viewCode: string;
+    liveDemo: string;
+    placeholder: string;
     featured: string;
     mockNotice: string;
     role: string;

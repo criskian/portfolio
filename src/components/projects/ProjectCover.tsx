@@ -20,6 +20,59 @@ function rng(seed: number) {
   };
 }
 
+/** Bronze → Silver → Gold: many raw rows condense into a few curated marts. */
+function Lakehouse() {
+  const layers = [
+    { y: 26, label: "bronze", dots: 22, r: 2.2 },
+    { y: 92, label: "silver", dots: 12, r: 3.2 },
+    { y: 158, label: "gold", dots: 5, r: 5 },
+  ];
+  return (
+    <>
+      {layers.map((layer, li) => (
+        <g key={layer.label}>
+          <rect
+            x={70}
+            y={layer.y}
+            width={300}
+            height={40}
+            rx={10}
+            fill="none"
+            strokeOpacity={0.35 + li * 0.2}
+          />
+          <text
+            x={30}
+            y={layer.y + 24}
+            className="cover-hl-text font-mono"
+            fontSize={10}
+            stroke="none"
+            textAnchor="middle"
+          >
+            {layer.label}
+          </text>
+          {Array.from({ length: layer.dots }, (_, i) => (
+            <circle
+              key={i}
+              cx={86 + (i * 268) / Math.max(1, layer.dots - 1)}
+              cy={layer.y + 20}
+              r={layer.r}
+              className={li === 2 ? "cover-hl cover-pulse" : "fill-bg"}
+              style={{ animationDelay: `${i * 0.2}s` }}
+            />
+          ))}
+          {li < 2 && (
+            <path
+              d={`M220 ${layer.y + 44} V${layer.y + 62}`}
+              className="cover-hl-stroke"
+              strokeDasharray="3 4"
+            />
+          )}
+        </g>
+      ))}
+    </>
+  );
+}
+
 function Graph() {
   const rand = rng(7);
   const nodes = Array.from({ length: 16 }, () => ({
@@ -209,6 +262,7 @@ function Agents() {
 }
 
 const VARIANTS: Record<CoverVariant, () => React.JSX.Element> = {
+  lakehouse: Lakehouse,
   graph: Graph,
   cloud: Cloud,
   stream: Stream,

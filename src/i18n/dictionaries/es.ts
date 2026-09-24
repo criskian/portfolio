@@ -50,8 +50,11 @@ export const es: Dictionary = {
     subtitle: "La parte que nadie ve y de la que todo depende.",
     viewCase: "Ver caso",
     viewCode: "Código",
+    liveDemo: "Demo en vivo",
+    placeholder: "Ejemplo",
     featured: "Destacado",
-    mockNotice: "Proyectos de ejemplo: pronto llegan los casos reales.",
+    mockNotice:
+      "Las tarjetas marcadas como “ejemplo” son provisionales: pronto llegan más casos reales.",
     role: "Rol",
     impact: "Impacto",
   },
