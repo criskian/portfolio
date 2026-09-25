@@ -11,7 +11,8 @@ export const contentType = "image/png";
 
 /** Social preview, generated once at build time (dark theme, neural motif). */
 export default async function OpengraphImage() {
-  const portrait = await readFile(join(process.cwd(), "assets/source/portrait-transparent.png"));
+  // Black & white, trimmed PNG produced by scripts/optimize-images.mjs (runs before build).
+  const portrait = await readFile(join(process.cwd(), "public/images/generated/portrait-og.png"));
   const src = `data:image/png;base64,${portrait.toString("base64")}`;
 
   const nodes = [
@@ -63,9 +64,9 @@ export default async function OpengraphImage() {
       <img
         src={src}
         alt=""
-        width={560}
-        height={650}
-        style={{ position: "absolute", left: -10, bottom: -40, objectFit: "cover" }}
+        width={540}
+        height={561}
+        style={{ position: "absolute", left: 10, bottom: -30 }}
       />
       <div
         style={{

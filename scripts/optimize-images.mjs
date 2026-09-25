@@ -4,9 +4,10 @@
  *
  * Source:  assets/source/portrait-transparent.png (RGBA, ~480 KB, 28% empty top)
  * Output:  public/images/generated/
- *   portrait-{w}.avif|webp   responsive, trimmed portrait
+ *   portrait-{w}.avif|webp   responsive, trimmed, black & white portrait
  *   portrait-halo.webp       wide blurred silhouette  (alpha mask, tinted in CSS)
  *   portrait-rim.webp        thin dilated silhouette  (alpha mask, tinted in CSS)
+ *   portrait-og.png          black & white PNG for the Open Graph image
  *
  * The glow is pre-baked as alpha masks so it costs nothing at runtime and a
  * single asset serves both themes (the colour comes from CSS variables).
@@ -90,10 +91,12 @@ async function main() {
   const source = sharp(SOURCE).ensureAlpha();
   const box = await subjectBox(source);
   const cropped = sharp(await source.clone().extract(box).png().toBuffer());
+  // Black & white portrait (the alpha channel is left untouched).
+  const mono = sharp(await cropped.clone().greyscale().png().toBuffer());
 
   const outputs = [];
   for (const width of WIDTHS) {
-    const resized = cropped.clone().resize({ width, withoutEnlargement: true });
+    const resized = mono.clone().resize({ width, withoutEnlargement: true });
     const avif = path.join(OUT_DIR, `portrait-${width}.avif`);
     const webp = path.join(OUT_DIR, `portrait-${width}.webp`);
     await resized.clone().avif({ quality: 58, effort: 6 }).toFile(avif);
@@ -106,6 +109,11 @@ async function main() {
   await (await alphaMask(cropped, { width: 400, dilate: 6, blur: 22 })).toFile(halo);
   await (await alphaMask(cropped, { width: 800, dilate: 2.2, blur: 1.4 })).toFile(rim);
   outputs.push(halo, rim);
+
+  // PNG copy for the Open Graph image (satori does not decode AVIF/WebP).
+  const og = path.join(OUT_DIR, "portrait-og.png");
+  await mono.clone().resize({ width: 640 }).png({ compressionLevel: 9 }).toFile(og);
+  outputs.push(og);
 
   await writeFile(
     manifest,
