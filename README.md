@@ -164,7 +164,7 @@ Accessibility: semantic landmarks and headings, skip link, keyboard-operable tog
 ## Editing content
 
 - **Copy** (both languages): [`src/i18n/dictionaries/`](src/i18n/dictionaries) — typed against one interface, so a missing translation fails the build.
-- **Projects** (currently placeholders): [`src/content/projects.ts`](src/content/projects.ts).
+- **Projects**: [`src/content/projects.ts`](src/content/projects.ts) — screenshots live in `public/images/projects/`.
 - **Links**: [`src/content/social.ts`](src/content/social.ts).
 - **Portrait**: replace `assets/source/portrait-transparent.png` and run `pnpm images --force`.
 
