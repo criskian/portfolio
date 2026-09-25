@@ -1,7 +1,10 @@
 export const SITE = {
   name: "Cristian Molina",
-  /** Canonical origin. Set NEXT_PUBLIC_SITE_URL once the deployment domain is decided. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /**
+   * Canonical origin for metadata, the sitemap and robots.txt. Defaults to the
+   * production domain so previews also point search engines to it.
+   */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://molinadev.co",
   role: "Software Engineer — AI solutions, cloud & data",
 } as const;
 
