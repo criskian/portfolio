@@ -90,7 +90,8 @@ export function Projects() {
           )}
         </header>
 
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {/* Dense flow on tablets fills the gaps left by 2-column cards; desktop keeps order. */}
+        <div className="grid gap-5 md:grid-flow-row-dense md:grid-cols-2 lg:grid-flow-row lg:grid-cols-3">
           {PROJECTS.map((project, index) => (
             <ProjectCard key={project.slug} project={project} index={index} />
           ))}
