@@ -72,13 +72,24 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 <span className="text-accent">{String(index + 1).padStart(2, "0")}</span> /{" "}
                 {project.cover}
               </span>
-              <span>{project.year}</span>
+              {(project.year || project.ongoing) && (
+                <span className="flex items-center gap-1.5">
+                  {project.ongoing && (
+                    <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+                  )}
+                  {[project.year, project.ongoing && t.projects.present]
+                    .filter(Boolean)
+                    .join(" → ")}
+                </span>
+              )}
             </div>
             <div
               className={cn(
                 "relative mt-4 overflow-hidden rounded-2xl border border-border bg-surface-2",
                 project.size === "lg" ? "aspect-[16/8]" : "aspect-[16/9]",
-                wide && "lg:aspect-auto lg:flex-1",
+                // Procedural covers can stretch; screenshots keep 16:9 so nothing is cropped.
+                wide && !project.image && "lg:aspect-auto lg:flex-1",
+                wide && project.image && "lg:my-auto",
               )}
             >
               <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.05] group-data-[active=true]:scale-[1.05]">
@@ -135,9 +146,12 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             </p>
 
             {project.metrics && project.size !== "md" && (
-              <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-border pt-4">
+              <dl
+                className="mt-5 grid gap-3 border-t border-border pt-4"
+                style={{ gridTemplateColumns: `repeat(${project.metrics.length}, minmax(0, 1fr))` }}
+              >
                 {project.metrics.map((metric) => (
-                  <div key={metric.value} className="flex flex-col-reverse">
+                  <div key={metric.value} className="flex flex-col-reverse justify-end">
                     <dt className="mt-0.5 font-mono text-[0.6rem] leading-snug tracking-wider text-muted uppercase">
                       {metric.label[locale]}
                     </dt>

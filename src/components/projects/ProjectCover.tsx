@@ -73,6 +73,45 @@ function Lakehouse() {
   );
 }
 
+/** A document with text lines and one AI suggestion highlighted beside it. */
+function Document() {
+  const lines = [0.9, 0.75, 0.82, 0.6, 0.88, 0.7, 0.8];
+  return (
+    <>
+      <rect x={60} y={20} width={170} height={180} rx={8} fill="none" strokeOpacity={0.5} />
+      <rect x={78} y={36} width={80} height={9} rx={3} className="cover-hl" stroke="none" />
+      {lines.map((w, i) => (
+        <line
+          key={i}
+          x1={78}
+          x2={78 + 134 * w}
+          y1={64 + i * 18}
+          y2={64 + i * 18}
+          strokeOpacity={i === 3 ? 1 : 0.35}
+          strokeWidth={i === 3 ? 2 : 1.5}
+          className={i === 3 ? "cover-hl-stroke" : undefined}
+        />
+      ))}
+      <path d="M232 118 H262" strokeDasharray="3 4" className="cover-hl-stroke" />
+      <g className="cover-pulse" style={{ transformOrigin: "300px 118px" }}>
+        <rect
+          x={262}
+          y={88}
+          width={96}
+          height={60}
+          rx={8}
+          fill="none"
+          className="cover-hl-stroke"
+        />
+        <line x1={274} x2={340} y1={106} y2={106} strokeOpacity={0.6} />
+        <line x1={274} x2={326} y1={120} y2={120} strokeOpacity={0.6} />
+        <circle cx={282} cy={136} r={4} className="cover-hl" stroke="none" />
+        <circle cx={296} cy={136} r={4} fill="none" strokeOpacity={0.6} />
+      </g>
+    </>
+  );
+}
+
 function Graph() {
   const rand = rng(7);
   const nodes = Array.from({ length: 16 }, () => ({
@@ -263,6 +302,7 @@ function Agents() {
 
 const VARIANTS: Record<CoverVariant, () => React.JSX.Element> = {
   lakehouse: Lakehouse,
+  document: Document,
   graph: Graph,
   cloud: Cloud,
   stream: Stream,

@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { PROJECTS } from "../../src/content/projects";
+
 test("loads in dark mode and English by default", async ({ page }) => {
   await page.goto("/");
   const html = page.locator("html");
@@ -17,5 +19,5 @@ test("renders the three sections in order", async ({ page }) => {
 
 test("lists every project", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#hidden-layers article")).toHaveCount(6);
+  await expect(page.locator("#hidden-layers article")).toHaveCount(PROJECTS.length);
 });

@@ -3,7 +3,7 @@ import type { Locale } from "@/i18n/types";
 type Localized = Record<Locale, string>;
 
 export type CoverVariant =
-  "lakehouse" | "graph" | "cloud" | "stream" | "vision" | "forecast" | "agents";
+  "lakehouse" | "document" | "graph" | "cloud" | "stream" | "vision" | "forecast" | "agents";
 
 export interface ProjectImage {
   /** Largest file; `srcSet` lists every generated width. */
@@ -22,10 +22,13 @@ export interface Project {
   role: Localized;
   /** One headline result — the "loss" this project reduced. */
   impact: Localized;
-  /** Up to three key figures, shown on large cards. */
+  /** Two or three key figures, shown on large cards. */
   metrics?: { value: string; label: Localized }[];
   stack: string[];
-  year: number;
+  /** Start year; omitted when not relevant. */
+  year?: number;
+  /** Still running / maintained — shown as "2025 → now". */
+  ongoing?: boolean;
   /** Bento size: `lg` spans two columns, `wide` spans the full row on desktop. */
   size: "lg" | "md" | "wide";
   featured?: boolean;
@@ -45,7 +48,10 @@ const projectImage = (name: string, alt: Localized): ProjectImage => ({
   alt,
 });
 
-/** See docs/CONTENT.md to add or replace projects. */
+/**
+ * Display order = grid order. On desktop (3 columns) sizes are paired so every
+ * row fills up: lg + md · wide · lg + md. See docs/CONTENT.md.
+ */
 export const PROJECTS: Project[] = [
   {
     slug: "retail-transactions-lakehouse",
@@ -89,89 +95,148 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    slug: "stratus",
-    title: "Stratus",
-    tagline: { en: "Multi-account cloud landing zone", es: "Landing zone cloud multicuenta" },
-    summary: {
-      en: "Infrastructure as code for 30+ AWS accounts: guardrails, networking and cost controls shipped through a single pipeline.",
-      es: "Infraestructura como código para más de 30 cuentas de AWS: guardrails, redes y control de costos desde un solo pipeline.",
+    slug: "almia-aws",
+    title: "Almia on AWS",
+    tagline: {
+      en: "Well-Architected target architecture, in production",
+      es: "Arquitectura objetivo Well-Architected, en producción",
     },
-    role: { en: "Cloud architect", es: "Arquitecto cloud" },
-    impact: { en: "−32% monthly cloud spend", es: "−32% gasto cloud mensual" },
-    stack: ["Terraform", "AWS Organizations", "GitHub Actions", "OPA"],
-    year: 2025,
+    summary: {
+      en: "Moved the main API from Render to ECS Fargate behind a WAF-protected load balancer, with a least-privilege role per service, Secrets Manager, OIDC deploys, autoscaling and alarms. I keep the ecosystem running: deploys, rollbacks, incidents and vulnerabilities.",
+      es: "Migré la API principal de Render a ECS Fargate detrás de un balanceador con WAF, con un rol de mínimo privilegio por servicio, Secrets Manager, despliegues OIDC, autoscaling y alarmas. Mantengo el ecosistema en producción: despliegues, rollbacks, incidentes y vulnerabilidades.",
+    },
+    role: { en: "Cloud architecture & operations", es: "Arquitectura cloud y operaciones" },
+    impact: {
+      en: "Render → ECS Fargate, no stored keys",
+      es: "Render → ECS Fargate, sin llaves guardadas",
+    },
+    stack: ["ECS Fargate", "AWS WAF", "Route 53", "Secrets Manager", "CloudWatch", "Bedrock"],
+    ongoing: true,
     size: "md",
-    mock: true,
     cover: "cloud",
-    links: { repo: "https://github.com/criskian" },
+    links: {},
   },
   {
-    slug: "synapse",
-    title: "Synapse",
-    tagline: { en: "Enterprise RAG assistant", es: "Asistente RAG empresarial" },
-    summary: {
-      en: "A retrieval-augmented assistant that turns 40,000 scattered internal documents into grounded, cited answers in seconds.",
-      es: "Un asistente con recuperación aumentada que convierte 40.000 documentos internos dispersos en respuestas citadas y confiables en segundos.",
+    slug: "cio",
+    title: "CIO",
+    tagline: {
+      en: "AI job hunter on WhatsApp · built end to end",
+      es: "Cazador de empleo con IA en WhatsApp · de principio a fin",
     },
-    role: { en: "Lead engineer", es: "Ingeniero líder" },
-    impact: { en: "−62% time-to-answer", es: "−62% tiempo de respuesta" },
-    stack: ["Python", "FastAPI", "LangGraph", "pgvector", "AWS Bedrock"],
-    year: 2026,
-    size: "md",
-    mock: true,
-    cover: "graph",
-    links: { repo: "https://github.com/criskian" },
-  },
-  {
-    slug: "sentinel",
-    title: "Sentinel Vision",
-    tagline: { en: "Edge defect detection", es: "Detección de defectos en el edge" },
     summary: {
-      en: "Computer-vision models optimised for edge devices that flag manufacturing defects before they leave the line.",
-      es: "Modelos de visión por computador optimizados para el edge que detectan defectos de fabricación antes de salir de la línea.",
+      en: "Job seekers tell CIO what they want in their own words; it finds live vacancies, sends the best match and then daily alerts at the hour they choose. A state machine with fast validators calls the LLM only when it adds value, so the chat feels natural and costs little. Users see a real vacancy before signing up, and paid plans activate inside the chat.",
+      es: "La persona le dice a CIO con sus palabras qué empleo busca; CIO encuentra vacantes reales, envía la mejor y luego alertas diarias a la hora que elija. Una máquina de estados con validadores rápidos llama al LLM solo cuando aporta, así el chat se siente natural y cuesta poco. Se ve una vacante real antes de registrarse, y los planes pagos se activan dentro del chat.",
     },
-    role: { en: "ML engineer", es: "Ingeniero de ML" },
-    impact: { en: "97.4% precision in production", es: "97,4% de precisión en producción" },
-    stack: ["PyTorch", "ONNX Runtime", "Jetson", "MLflow"],
-    year: 2024,
-    size: "md",
-    mock: true,
-    cover: "vision",
-    links: { repo: "https://github.com/criskian" },
-  },
-  {
-    slug: "horizon",
-    title: "Horizon",
-    tagline: { en: "Demand forecasting platform", es: "Plataforma de pronóstico de demanda" },
-    summary: {
-      en: "Feature store, training and batch inference for thousands of SKU-level forecasts, retrained automatically every week.",
-      es: "Feature store, entrenamiento e inferencia batch para miles de pronósticos por SKU, reentrenados automáticamente cada semana.",
+    role: {
+      en: "Designed, built & maintained end to end",
+      es: "Diseño, desarrollo y mantenimiento de principio a fin",
     },
-    role: { en: "ML & data engineer", es: "Ingeniero de ML y datos" },
-    impact: { en: "+18% forecast accuracy", es: "+18% precisión del pronóstico" },
-    stack: ["Vertex AI", "BigQuery", "dbt", "Python"],
-    year: 2024,
-    size: "md",
-    mock: true,
-    cover: "forecast",
-    links: { repo: "https://github.com/criskian" },
-  },
-  {
-    slug: "relay",
-    title: "Relay",
-    tagline: { en: "Agentic incident triage", es: "Triaje de incidentes con agentes" },
-    summary: {
-      en: "LLM agents with tool access that read alerts, correlate logs and runbooks, and resolve the routine incidents on their own.",
-      es: "Agentes LLM con acceso a herramientas que leen alertas, correlacionan logs y runbooks, y resuelven solos los incidentes rutinarios.",
+    impact: {
+      en: "Value first: a real vacancy before sign-up",
+      es: "Valor primero: una vacante real antes del registro",
     },
-    role: { en: "AI engineer", es: "Ingeniero de IA" },
-    impact: { en: "58% of tickets auto-resolved", es: "58% de tickets resueltos solos" },
-    stack: ["TypeScript", "LLM agents", "MCP", "Kubernetes", "Grafana"],
-    year: 2026,
+    metrics: [
+      { value: "2,400+", label: { en: "registered users", es: "usuarios registrados" } },
+      {
+        value: "#1",
+        label: { en: "acquisition channel at Almia", es: "canal de adquisición de Almia" },
+      },
+      {
+        value: "0",
+        label: { en: "stored cloud keys (OIDC)", es: "llaves cloud guardadas (OIDC)" },
+      },
+    ],
+    stack: [
+      "NestJS",
+      "TypeScript",
+      "PostgreSQL",
+      "OpenAI",
+      "WhatsApp Cloud API",
+      "SerpApi",
+      "Wompi",
+      "AWS",
+    ],
+    year: 2025,
+    ongoing: true,
     size: "wide",
-    mock: true,
+    featured: true,
     cover: "agents",
-    links: { repo: "https://github.com/criskian" },
+    image: projectImage("cio", {
+      en: "CIO landing page: “The largest job-offer hunter in LATAM”, with WhatsApp on a phone",
+      es: "Página de CIO: “El cazador de ofertas de empleo más grande de LATAM”, con WhatsApp en un celular",
+    }),
+    links: { demo: "https://cio.almia.com.co/" },
+  },
+  {
+    slug: "almia-platform",
+    title: "Almia Platform",
+    tagline: {
+      en: "Inclusive hiring platform · Companies & People suites",
+      es: "Plataforma de empleo inclusivo · suites Empresas y Personas",
+    },
+    summary: {
+      en: "Core backend and both suites of a platform that connects people with disabilities with employers. Companies get an AI recruiting agent that streams candidates live and searches Almia's own talent bank through a RAG pool, plus a CRM pipeline, interview scheduling and a legal hiring-quota dashboard. People get an AI interview coach, a LinkedIn optimizer and a CV editor.",
+      es: "Backend central y las dos suites de una plataforma que conecta a personas con discapacidad con empresas. Las empresas tienen un agente de reclutamiento con IA que entrega candidatos en vivo y busca en el banco de talento propio con un pool RAG, además de CRM, agenda de entrevistas y un tablero de cuota legal. Las personas tienen coach de entrevistas con IA, optimizador de LinkedIn y editor de CV.",
+    },
+    role: {
+      en: "Primary contributor · most of 350+ commits",
+      es: "Contribuidor principal · la mayoría de 350+ commits",
+    },
+    impact: {
+      en: "RAG talent pool live for every company",
+      es: "Talent pool RAG activo para todas las empresas",
+    },
+    metrics: [
+      {
+        value: "1,344",
+        label: { en: "profiles in the RAG talent pool", es: "perfiles en el pool RAG" },
+      },
+      {
+        value: "149",
+        label: { en: "anonymized inclusive resumes", es: "hojas de vida inclusivas anónimas" },
+      },
+      {
+        value: "350+",
+        label: { en: "commits, most of them mine", es: "commits, la mayoría míos" },
+      },
+    ],
+    stack: ["Amazon Bedrock", "pgvector", "SQS", "Fargate Spot", "Wompi", "Playwright"],
+    ongoing: true,
+    size: "lg",
+    cover: "graph",
+    image: projectImage("almia-platform", {
+      en: "Almia home page: “Talent without barriers, employment for everyone”",
+      es: "Página de inicio de Almia: “Talento sin barreras, empleo para todos”",
+    }),
+    links: { demo: "https://www.almia.com.co/" },
+  },
+  {
+    slug: "cv-creator",
+    title: "CV Creator",
+    tagline: {
+      en: "From form builder to AI document editor",
+      es: "De formulario a editor de documentos con IA",
+    },
+    summary: {
+      en: "The whole CV became one document you click to edit, with autosave and AI suggestions you accept or reject one by one. A rules engine plus Claude on Bedrock, with a vision fallback for scanned PDFs and guardrails so the AI never invents dates.",
+      es: "La hoja de vida pasó a ser un solo documento que se edita con un clic, con guardado automático y sugerencias de IA que se aceptan o rechazan una a una. Motor de reglas más Claude en Bedrock, con lectura por visión de PDFs escaneados y guardrails para que la IA nunca invente fechas.",
+    },
+    role: {
+      en: "Co-developer · led the restructure",
+      es: "Co-desarrollador · lideré la reestructuración",
+    },
+    impact: {
+      en: "PDF & Word export that matches the editor",
+      es: "Exporta a PDF y Word igual al editor",
+    },
+    stack: ["Amazon Bedrock", "Claude Haiku 4.5", "Rules engine", "PDF/DOCX"],
+    size: "md",
+    cover: "document",
+    image: projectImage("cv-creator", {
+      en: "CV Creator editor: the CV document next to a panel of AI suggestions to review",
+      es: "Editor del Creador de hojas de vida: el documento junto a un panel de sugerencias de IA por revisar",
+    }),
+    links: { demo: "https://staging.creatorhv.almia.com.co/" },
   },
 ];
 
