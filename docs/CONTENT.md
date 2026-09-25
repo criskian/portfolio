@@ -30,14 +30,15 @@ notice while at least one remains. Delete them as real projects arrive.
   summary: { en: "…", es: "…" },             // 2–3 sentences: problem → what was built → why it matters
   role: { en: "Data engineer", es: "Ingeniero de datos" },
   impact: { en: "−40% latency", es: "−40% de latencia" }, // one headline result
-  metrics: [                                 // optional, up to 3, shown on lg / wide cards
+  metrics: [                                 // optional, 2–3 figures, shown on lg / wide cards
     { value: "10.6M", label: { en: "rows processed", es: "filas procesadas" } },
   ],
   stack: ["PySpark", "DuckDB"],              // 4–6 chips reads best
-  year: 2026,
+  year: 2026,                                // optional start year
+  ongoing: true,                             // optional: shows "2026 → now"
   size: "md",                                // "lg" = 2 columns, "wide" = full row
   featured: false,
-  cover: "graph",                            // lakehouse | graph | cloud | stream | vision | forecast | agents
+  cover: "graph",                            // lakehouse | document | graph | cloud | stream | vision | forecast | agents
   image: projectImage("my-project", { en: "Alt text…", es: "Texto alternativo…" }),
   links: { demo: "https://…", case: "https://…", repo: "https://…" },
 }
