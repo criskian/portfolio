@@ -72,5 +72,7 @@ email.
 
 ## Deployment URL
 
-Set `NEXT_PUBLIC_SITE_URL` (e.g. `https://cristianmolina.dev`) in the hosting
-environment so metadata, the sitemap and robots.txt use the real domain.
+The canonical origin is `https://molinadev.co` (default in
+[`src/content/social.ts`](../src/content/social.ts)). Override it with the
+`NEXT_PUBLIC_SITE_URL` environment variable only if the domain changes — see
+[Deployment](../README.md#deployment).

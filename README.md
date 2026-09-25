@@ -5,6 +5,8 @@
 **Software engineer focused on AI solutions, cloud and data.**
 A neural-network themed single page where scrolling _is_ a forward pass.
 
+**[molinadev.co](https://molinadev.co)**
+
 [![CI](https://github.com/criskian/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/criskian/portfolio/actions/workflows/ci.yml)
 [![Lighthouse](https://github.com/criskian/portfolio/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/criskian/portfolio/actions/workflows/lighthouse.yml)
 [![CodeQL](https://github.com/criskian/portfolio/actions/workflows/codeql.yml/badge.svg)](https://github.com/criskian/portfolio/actions/workflows/codeql.yml)
@@ -24,6 +26,7 @@ A neural-network themed single page where scrolling _is_ a forward pass.
 - [Tech stack](#tech-stack)
 - [Getting started](#getting-started)
 - [Scripts](#scripts)
+- [Deployment](#deployment)
 - [Project structure](#project-structure)
 - [The SplashCursor rule](#the-splashcursor-rule)
 - [Performance & accessibility](#performance--accessibility)
@@ -92,9 +95,9 @@ pnpm dev            # http://localhost:3000
 
 Optional environment variable:
 
-| Variable               | Purpose                                                       | Default                 |
-| ---------------------- | ------------------------------------------------------------- | ----------------------- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical origin used by metadata, the sitemap and robots.txt | `http://localhost:3000` |
+| Variable               | Purpose                                                                             | Default                |
+| ---------------------- | ----------------------------------------------------------------------------------- | ---------------------- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin used by metadata, the Open Graph image, the sitemap and robots.txt | `https://molinadev.co` |
 
 ## Scripts
 
@@ -109,6 +112,26 @@ Optional environment variable:
 | `pnpm format`    | Prettier (write) · `pnpm format:check` to verify                                                                                                          |
 | `pnpm test`      | Unit tests (Vitest)                                                                                                                                       |
 | `pnpm test:e2e`  | End-to-end tests (Playwright) against the production build — run `pnpm build` first. Locally you can reuse an installed browser with `PW_CHANNEL=chrome`. |
+
+## Deployment
+
+Production runs on **[Vercel](https://vercel.com)** at **[molinadev.co](https://molinadev.co)**. The site is fully static, so no server configuration is needed.
+
+1. **Import the repository** in Vercel with the project root (`./`) as _Root Directory_. Vercel detects Next.js and pnpm.
+2. **Keep the default build settings.** Vercel runs the `build` script from `package.json`, which generates the portrait assets and then runs `next build`. Do not override the build command with plain `next build`: the image pipeline would be skipped.
+3. **Environment variables** (_Settings → Environment Variables_):
+
+   | Variable                       | Value                  | Environments |
+   | ------------------------------ | ---------------------- | ------------ |
+   | `NEXT_PUBLIC_SITE_URL`         | `https://molinadev.co` | Production   |
+   | `ENABLE_EXPERIMENTAL_COREPACK` | `1`                    | All          |
+
+   Corepack makes Vercel install the exact pnpm version pinned in `package.json` (`packageManager`). Preview deployments keep `https://molinadev.co` as their canonical URL (the default in [`src/content/social.ts`](src/content/social.ts)), so search engines only index production.
+
+4. **Node.js 22.x** in _Settings → General_ (matches [`.nvmrc`](.nvmrc)).
+5. **Domain** (_Settings → Domains_): add `molinadev.co` and `www.molinadev.co`, redirect `www` to the apex, and create the DNS records Vercel shows (an `A` record for the apex and a `CNAME` for `www`) at the domain registrar. HTTPS certificates are issued automatically.
+
+`main` deploys to production; every pull request gets its own preview URL.
 
 ## Project structure
 

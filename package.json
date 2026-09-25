@@ -56,6 +56,7 @@
   },
   "packageManager": "pnpm@12.6.0",
   "description": "Cristian Molina — Software Engineer focused on AI solutions, cloud and data.",
+  "homepage": "https://molinadev.co",
   "author": "Cristian Molina (https://github.com/criskian)",
   "license": "MIT",
   "repository": {
