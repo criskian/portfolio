@@ -74,7 +74,6 @@ export const es: Dictionary = {
       "Si tienes un problema lleno de ruido, quiero escucharlo.",
     ],
     cta: "Envíame un input",
-    ctaHint: "Suelo responder en menos de un día",
   },
   footer: {
     signature: "modelo v1.0 — entrenado con curiosidad y café",

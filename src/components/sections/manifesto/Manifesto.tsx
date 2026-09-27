@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRightIcon } from "@/components/icons";
 import ClickSpark from "@/components/reactbits/ClickSpark";
 import Magnet from "@/components/reactbits/Magnet";
-import ShinyText from "@/components/reactbits/ShinyText";
 import { BlurRichText } from "@/components/text/BlurRichText";
 import { ScrollRevealText } from "@/components/text/ScrollRevealText";
 import { CONTACT_HREF } from "@/content/social";
@@ -119,14 +118,6 @@ export function Manifesto() {
               </a>
             </ClickSpark>
           </Magnet>
-          <ShinyText
-            key={`hint-${locale}`}
-            text={manifesto.ctaHint}
-            speed={3}
-            color="var(--muted)"
-            shineColor="var(--fg)"
-            className="font-mono text-xs"
-          />
         </div>
       </div>
 

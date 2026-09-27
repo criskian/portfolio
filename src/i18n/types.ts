@@ -68,7 +68,6 @@ export interface Dictionary {
     title: string;
     paragraphs: readonly string[];
     cta: string;
-    ctaHint: string;
   };
   footer: {
     signature: string;

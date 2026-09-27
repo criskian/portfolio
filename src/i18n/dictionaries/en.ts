@@ -68,7 +68,6 @@ export const en: Dictionary = {
       "If you have a problem full of noise, I want to hear it.",
     ],
     cta: "Send an input",
-    ctaHint: "Usually replies within a day",
   },
   footer: {
     signature: "model v1.0 — trained on curiosity and coffee",
