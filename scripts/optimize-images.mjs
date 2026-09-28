@@ -2,7 +2,7 @@
 /**
  * Image pipeline — runs before `dev` and `build`.
  *
- * Source:  assets/source/portrait-transparent.png (RGBA, ~480 KB, 28% empty top)
+ * Source:  assets/source/portrait-transparent.png (RGBA, 2780×3228, 28% empty top)
  * Output:  public/images/generated/
  *   portrait-{w}.avif|webp   responsive, trimmed, black & white portrait
  *   portrait-halo.webp       wide blurred silhouette  (alpha mask, tinted in CSS)
@@ -24,8 +24,9 @@ const SOURCE = path.join(ROOT, "assets/source/portrait-transparent.png");
 const OUT_DIR = path.join(ROOT, "public/images/generated");
 
 /** Keep in sync with src/content/portrait.ts */
-const WIDTHS = [320, 480, 640, 800];
-const MARGIN = { x: 110, top: 160 };
+const WIDTHS = [320, 480, 640, 800, 1080, 1440];
+/** Crop margins as a fraction of the source width (110px / 160px on a 960px-wide source). */
+const MARGIN = { x: 110 / 960, top: 160 / 960 };
 const ALPHA_THRESHOLD = 16;
 
 async function subjectBox(image) {
@@ -50,15 +51,19 @@ async function subjectBox(image) {
     }
   }
 
-  const left = Math.max(0, minX - MARGIN.x);
-  const top = Math.max(0, minY - MARGIN.top);
-  const right = Math.min(info.width, maxX + MARGIN.x);
+  const marginX = Math.round(MARGIN.x * info.width);
+  const marginTop = Math.round(MARGIN.top * info.width);
+  const left = Math.max(0, minX - marginX);
+  const top = Math.max(0, minY - marginTop);
+  const right = Math.min(info.width, maxX + marginX);
   return { left, top, width: right - left, height: info.height - top };
 }
 
 /** Build a white RGBA image whose alpha is a processed copy of the subject's alpha. */
 async function alphaMask(cropped, { width, dilate, blur }) {
   let alpha = cropped.clone().resize({ width }).extractChannel("alpha");
+  // Median drops stray hair strands so the dilation doesn't turn them into glowing wisps.
+  alpha = sharp(await alpha.median(5).toBuffer());
   // Dilate: blur then threshold grows the silhouette by ~`dilate` px.
   if (dilate) alpha = sharp(await alpha.blur(dilate).threshold(12).toBuffer());
   const soft = await alpha.blur(blur).toBuffer();
